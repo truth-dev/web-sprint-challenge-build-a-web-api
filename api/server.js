@@ -5,15 +5,19 @@ const server = express();
 const actionRouter = require('./actions/actions-router')
 const projectRouter = require('./projects/projects-router')
 
-server.use(express.json())
-server.use('./api/actions', actionRouter)
-server.use('./api/projects', projectRouter)
 
-server.use((err, req, res, next) => {
-    res.status(500).json({
-        message: err.message,
-        stack: err.stack
-    })
+server.use(express.json())
+server.use('/api/actions', actionRouter)
+server.use('/api/projects', projectRouter)
+
+server.use('/welcome', (req, res) => {
+    res.send(`<h1>WElCOME</h1>`)
+})
+
+server.use('*', (req, res) => {
+ res.status(404).json({
+    message:`cant find ${req.method} on ${req.originalUrl}`
+ })
 })
 
 // Configure your server here
